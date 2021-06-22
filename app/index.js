@@ -13,7 +13,7 @@ export default function PersonList() {
   return (
     <ul>
       {persons.map((person) => (
-        <li key={person.UserID}>{person.Name + " " + person.Code}</li>
+        <li key={person.CourseID}>{person.Name + " " + person.Code}</li>
       ))}
     </ul>
   );
