@@ -7,12 +7,17 @@ export default function LoginPage() {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    const token = await handleLogin({
-      email: email.value,
-      password: password.value,
+    const res = await handleLogin({
+      email: email.current.value,
+      password: password.current.value,
     });
-    window.localStorage.setItem("loginToken", token);
-    console.log(token);
+    if (res.Token) {
+      window.localStorage.setItem("loginToken", JSON.stringify(res));
+      console.log("login");
+    } else {
+      console.log("failed");
+      // TODO: Invalid login
+    }
   };
 
   return (
