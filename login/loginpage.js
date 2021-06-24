@@ -11,12 +11,12 @@ export default function LoginPage() {
       email: email.current.value,
       password: password.current.value,
     });
-    if (res.Token) {
+    console.log(res);
+    if (res.status === 200) {
       window.localStorage.setItem("loginToken", JSON.stringify(res));
-      console.log("login");
-    } else {
-      console.log("failed");
-      // TODO: Invalid login
+      console.log("Sucessful login");
+    } else if (res.status === 401) {
+      console.log("Invalid Creds");
     }
   };
 
