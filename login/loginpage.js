@@ -1,9 +1,13 @@
-import React, { useRef } from "react";
-import handleLogin from "./handlelogin";
+import React, { useContext, useRef } from "react";
+
+import AuthContext from "./authContext";
+import handleLogin from "./authHandler";
 
 export default function LoginPage() {
   const email = useRef();
   const password = useRef();
+  const test = useContext(AuthContext);
+  console.log(test);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -13,7 +17,7 @@ export default function LoginPage() {
     });
     console.log(res);
     if (res.status === 200) {
-      window.localStorage.setItem("loginToken", JSON.stringify(res));
+      window.localStorage.setItem("userInfo", JSON.stringify(res.data));
       console.log("Sucessful login");
     } else if (res.status === 401) {
       console.log("Invalid Creds");
