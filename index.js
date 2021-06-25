@@ -2,15 +2,17 @@ import React, { useEffect, useState } from "react";
 import ReactDOM from "react-dom";
 
 import { handleAuth } from "./login/authHandler";
-import LoadingPage from "./misc/LoadingPage";
 import AuthContext from "./login/authContext";
+
+import LoadingPage from "./misc/LoadingPage";
 import MainPage from "./main/MainPage";
+import LoginPage from "./login/LoginPage";
 
 import "./misc/styles.css";
 
 function App() {
   const [userInfo, setUserInfo] = useState({});
-  const [reqDone, setReqDone] = useState(false);
+  const [status, setStatus] = useState("req");
 
   useEffect(() => {
     const userInfo = JSON.parse(window.localStorage.getItem("userInfo"));
@@ -23,18 +25,33 @@ function App() {
         if (res.status === 200) {
           // Good token
           setUserInfo(res.data);
-        } else if (res.status === 401) {
-          // Bad token
+          setStatus("suc");
+        } else {
+          // Bad token so we remove
           window.localStorage.removeItem("userInfo");
+          setStatus("fail");
         }
-        setReqDone(true);
       });
+    } else {
+      setStatus("fail");
     }
-  }, [setUserInfo]);
+  }, []);
+
+  console.log(userInfo);
+
   return (
-    <AuthContext.Provider value={userInfo}>
-      {reqDone && <MainPage></MainPage>}
-      {!reqDone && <LoadingPage></LoadingPage>}
+    <AuthContext.Provider
+      value={{
+        userInfo,
+        setUserInfo: (userInfo) => {
+          setUserInfo(userInfo);
+          setStatus("suc");
+        },
+      }}
+    >
+      {status === "suc" && <MainPage></MainPage>}
+      {status === "fail" && <LoginPage></LoginPage>}
+      {status === "req" && <LoadingPage></LoadingPage>}
     </AuthContext.Provider>
   );
 }

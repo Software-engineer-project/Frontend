@@ -6,8 +6,7 @@ import handleLogin from "./authHandler";
 export default function LoginPage() {
   const email = useRef();
   const password = useRef();
-  const test = useContext(AuthContext);
-  console.log(test);
+  const authContext = useContext(AuthContext);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -15,9 +14,10 @@ export default function LoginPage() {
       email: email.current.value,
       password: password.current.value,
     });
-    console.log(res);
+
     if (res.status === 200) {
       window.localStorage.setItem("userInfo", JSON.stringify(res.data));
+      authContext.setUserInfo(res.data);
       console.log("Sucessful login");
     } else if (res.status === 401) {
       console.log("Invalid Creds");
